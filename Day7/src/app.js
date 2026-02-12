@@ -10,13 +10,18 @@ POST /notes
 req.body => {title , description}
 */
 // internet ke
-app.get("/", (req , res)=>{
-  res.send("Hello world")
-})
-app.get("/notes",(req,res)=>{
-  res.send(notes)
-})
+app.get("/notes", async (req , res)=>{
+  // notemodel.find method database se data leta hai or notes variable me store krwa lenge
 
+  // find method hamesha array of object ke form me data return krti hai
+  const notes = await notemodel.find();
+
+  res.status(200).json({
+    message:"Notes fetched successfully",
+    notes
+  })
+ 
+})
 // middilware jisse apka express json ko understand krega eske bina express smjh req ko smjh nhi skta 
 app.use(express.json());
 
