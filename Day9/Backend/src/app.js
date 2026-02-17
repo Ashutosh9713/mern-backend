@@ -3,9 +3,11 @@
 const express = require("express");
 const noteModel = require("./models/note.model")
 const app = express();
+const cors = require("cors")
 
 // middleware to let express to understand json 
 app.use(express.json())
+app.use(cors())
 /*
  -POST /api/notes
  req.body = {titile , description }
@@ -17,11 +19,11 @@ app.use(express.json())
 
 app.post('/api/notes', async (req,res)=>{
     // data clint se destructure krke le liya 
-    const {titile , description} = req.body
+    const {title , description} = req.body
 
     // database me new note crate krega
    const note =  await noteModel.create({
-        titile,description
+        title,description
     })
     res.status(201).json({
         message:"note created sucsessfuly"
@@ -61,8 +63,8 @@ app.patch("/api/notes/:id", async (req,res)=>{
     try{
 
         const id = req.params.id;
-        const {description} = req.body
-        await noteModel.findByIdAndUpdate(id,{description});
+        const {title,description} = req.body
+        await noteModel.findByIdAndUpdate(id,{title,description});
   
         res.status(200).json({
           message:"note updated successfully",

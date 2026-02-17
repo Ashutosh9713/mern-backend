@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 
 // note kiss formate me create hoga usse schema bolte hai 
 const noteSchema = new mongoose.Schema({
-    titile:String,
+    title:String,
     description:String,
 })
 
