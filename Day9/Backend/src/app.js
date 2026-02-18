@@ -3,11 +3,19 @@
 const express = require("express");
 const noteModel = require("./models/note.model")
 const app = express();
-const cors = require("cors")
+const cors = require("cors");
+const path = require("path")
 
 // middleware to let express to understand json 
 app.use(express.json())
 app.use(cors())
+
+app.use(express.static("./public"))
+
+// har random api me index.html bhej diya wild card se but usme css or js field me bhi index.html jata hai , esse tackel krne ke liye app.use(express.static("./public krna hota hai "))
+
+// public ke under html css js file hai wo sb ke liye available bna deta hai uper wala middleware
+
 /*
  -POST /api/notes
  req.body = {titile , description }
@@ -61,7 +69,6 @@ app.delete("/api/notes/:id" , async (req,res)=>{
 
 app.patch("/api/notes/:id", async (req,res)=>{
     try{
-
         const id = req.params.id;
         const {title,description} = req.body
         await noteModel.findByIdAndUpdate(id,{title,description});
@@ -79,7 +86,14 @@ app.patch("/api/notes/:id", async (req,res)=>{
 })
 
 
-app.use(express.json());
+
+// __dirname  = app.js file jiss oleder ke under hai uss folder tak ka path hame dekhne ko mil jata hai 
+
+
+// wild card api jo har ramdom api pe resonse kre
+app.use("*name",(req,res)=>{
+    res.sendFile(path.join(__dirname,".." , "/public/index.html"))
+})
 
 
 module.exports = app;

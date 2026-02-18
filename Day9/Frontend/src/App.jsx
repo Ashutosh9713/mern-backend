@@ -5,12 +5,12 @@ import axios from "axios"
 
 function App() {
 
+  // state variables
   const [notes, setNotes] = useState([]);
-
-
   const [isEditing, setIsEditing] = useState(false);
   const [currentNoteId, setCurrentNoteId] = useState(null);
 
+  // Fetch data from the db
   function FetchNotes() {
     axios.get("http://localhost:3000/api/notes")
       .then((res) => {
@@ -36,8 +36,6 @@ function App() {
       const { title, description } = e.target.elements;
       console.log(title.value, description.value);
 
-
-
       axios.patch(`http://localhost:3000/api/notes/${currentNoteId}`, {
         title: title.value,
         description: description.value,
@@ -61,15 +59,12 @@ function App() {
       }).then((res) => {
         console.log(res.data)
         FetchNotes();
-         title.value = '';
+        title.value = '';
         description.value = '';
-       
+
       })
-      
+
     }
-    
-
-
 
   }
 
@@ -83,7 +78,7 @@ function App() {
   }
 
   function handleEdit(note) {
-  
+
 
     setIsEditing(true);
     setCurrentNoteId(note._id);
