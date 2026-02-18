@@ -12,7 +12,7 @@ function App() {
 
   // Fetch data from the db
   function FetchNotes() {
-    axios.get("http://localhost:3000/api/notes")
+    axios.get("https://mern-backend-y34r.onrender.com/api/notes")
       .then((res) => {
         setNotes(res.data.notes);
         // jab bhi aap ek state variabkle ko change kr rhe ho to uska component ess case me app component rerender hoga 
@@ -36,7 +36,7 @@ function App() {
       const { title, description } = e.target.elements;
       console.log(title.value, description.value);
 
-      axios.patch(`http://localhost:3000/api/notes/${currentNoteId}`, {
+      axios.patch(`https://mern-backend-y34r.onrender.com/api/notes/${currentNoteId}`, {
         title: title.value,
         description: description.value,
       }).then((res) => {
@@ -53,7 +53,7 @@ function App() {
       console.log(title.value, description.value);
 
       // axios se post method mara ja rha hai url pe comma ke bad body me jaise value pass krte the wo value
-      axios.post("http://localhost:3000/api/notes", {
+      axios.post("https://mern-backend-y34r.onrender.com/api/notes", {
         title: title.value,
         description: description.value
       }).then((res) => {
@@ -70,7 +70,7 @@ function App() {
 
   function handleDelete(id) {
     console.log(id)
-    axios.delete(`http://localhost:3000/api/notes/${id}`)
+    axios.delete(`https://mern-backend-y34r.onrender.com/api/notes/${id}`)
       .then((res) => {
         console.log(res.data)
         FetchNotes();
