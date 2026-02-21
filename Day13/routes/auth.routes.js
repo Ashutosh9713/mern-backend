@@ -5,7 +5,7 @@ const crypto  = require("crypto");
 
 
 
-
+// authentication : btata hai ki user kon hai  
 
 // authentication use krne ke liye auth ko valid authentication express se allow krwana hoga 
 
@@ -71,8 +71,17 @@ authRouter.get("/get-me" , async ( req,res)=>{
    }
 
  const decoded =   jwt.verify(token , process.env.JWT_SECRET);
+//   decoded me id hoga essi id se user kofind krenge
 
- res.status(201)
+const user = await userModel.findById(decoded.id);
+
+
+
+ res.status(201).json({
+     message:"this is the ",
+     name: user.name,
+     email: user.email
+ })
 
 
 })
@@ -80,20 +89,55 @@ authRouter.get("/get-me" , async ( req,res)=>{
 
 // post  /api/auth/login
 
-// authRouter.post("/login" , async (req,res)=>{
-//    const {email , password} = req.body;
+authRouter.post("/login" , async (req,res)=>{
+   const {email , password} = req.body;
 
-//    const isUserAlreadyExist = await userModel.findOne({email});
+   const user = await userModel.findOne({email});
 
-//    if(!isUserAlreadyExist){
-//      return res.status(409).json({
-//       message:" This email is not registerd"
-//      })
-//    }
+   if(!user){
+     return res.status(404).json({
+      message:" This email is not registerd"
+     })
+   }
+  
+// hashing me same input do same output milega
+   const hashpass = crypto.createHash("sha256").update(password).digest("hex");
+  
+   const isPasswordValid = hashpass === user.password
+
+   if(!isPasswordValid){
+      res.status(401).json({
+         message:"Invald password"
+
+      })
+   }
+    
+   const token = jwt.sign(
+      {
+         id:user._id,
+         email:user.email
+      },
+      process.env.JWT_SECRET,
+      {
+         expiresIn:"1hr"
+      }
+   )
+
+   res.cookie("JWT_TOKEN" , token)
+
+   res.status(201).json({
+      message:"You are logged in successfully",
+      user,
+      token
+
+   })
+
+   
+
 
   
 
 
-// })
+})
 
 module.exports = authRouter ; 
