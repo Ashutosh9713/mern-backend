@@ -1,12 +1,12 @@
 const mongoose = require("mongoose");
 
 
+// create schema 
 const userSchema = new  mongoose.Schema({
-      username:{
+      name:{
         type:String,
-        unique:[true , "this username is already exist "],
-        require:true,
-        trimg:true
+        required:true,
+        trimg:true,
       },
       email:{
          type:String,
@@ -15,14 +15,16 @@ const userSchema = new  mongoose.Schema({
       },
       password:String , 
       bio:String,
-      profile:{
+      profileImg:{
         type:String,
-        default:"https://ik.imagekit.io/bd5pedkfq/defaultuserimage.avif"
+        default:""
       }
-
 })
 
 
+// wo schema se model create kro user name ka collection create hoga aur usme userSchema ke according data store hoga
+
 const userModel = mongoose.model("user" , userSchema);
+                              // ye name ka collection , ye schema ko use krte huye 
 
 module.exports = userModel ; 
