@@ -79,7 +79,7 @@ authRouter.post("/register", async (req, res) => {
        // creating a token by unique userdetail and jwt_secret
        const token = jwt.sign({
               email,
-              password: hash,
+              password: hash,   
             },
               process.env.JWT_SECRET,
               {
@@ -142,6 +142,8 @@ authRouter.post("/login" , async (req,res)=>{
        const token = jwt.sign({
                email:email,
                password:hashPassword,
+               id:user._id
+             
        },
        process.env.JWT_SECRET,
        {
@@ -156,7 +158,8 @@ authRouter.post("/login" , async (req,res)=>{
               message:"User logged in ",
               user:{
                    name : user.name,
-                   email: user.email
+                   email: user.email,
+                   password:user.password
               }
        })
        

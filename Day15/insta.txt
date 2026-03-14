@@ -1,0 +1,17 @@
+==> Authentication
+  -> Register (1. user ka data store krna , 2. token crreate krna)
+  -> login (1. user ka data check krna , 2. token crreate krna)
+  -> logout (1. token delete krna , blasklist krn a)
+  -> OTP based rgistration (1. user ka data store krna , 2. OTP generate krna , 3. OTP verify krna , 4. token crreate krna)
+
+  -> refresh (1. token refresh krna)
+
+==> post 
+  =>create
+  =>can see the feed
+  => like post (collection types)
+  => save post 
+
+==>Users
+  =>followers
+  =>following
