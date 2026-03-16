@@ -20,10 +20,10 @@ app.use(express.json());
 // calling the cooke-parser and use as a middleware
 app.use(cookieParser())
 
-// middleware 
 
+// routes middlware
 // using prefix 
-app.use("/api/auth",authRouter)
+app.use("/api/auth",authRouter);
 
 // using preix
 app.use("/api/posts",upload.single("image_url") ,postRouter )
