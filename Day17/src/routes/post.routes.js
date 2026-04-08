@@ -4,7 +4,7 @@ const postRouter = express.Router();
 const postController = require("../controllers/post.controller");
 const getPostDetailsController = require("../controllers/post.controller")
 const identifyUser = require("../middlewares/auth.middleware");
-
+  
 /**
  * 
 // post  /api/auth/posts [protected]

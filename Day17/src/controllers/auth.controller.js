@@ -8,7 +8,7 @@ const mongoose = require("mongoose")
 
 
 async function registerUserController(req,res){
-      const { name, email, password, bio } = req.body;
+      const { username, email, password, bio } = req.body;
            console.log(req.body);
     
            // =========================
@@ -25,7 +25,7 @@ async function registerUserController(req,res){
            // single req se hi databse se value la skte hai
            // DB se dubble value se check krne ke liye $or:[{email},{password}] dono mese ek bhi value milega to true return krega
            const isUserAlreadyExist = await userModel.findOne({
-                  $or: [{ email }, { name }]
+                  $or: [{ email }, { username }]
            })
            
            if (isUserAlreadyExist) {
@@ -50,7 +50,7 @@ async function registerUserController(req,res){
            const hash = await bcrypt.hash(password, saltRounds);
     
            const user = await userModel.create({
-                  name,
+                  username,
                   email,
                   password: hash,
                   bio
@@ -60,6 +60,8 @@ async function registerUserController(req,res){
            // creating a token by unique userdetail and jwt_secret
            const token = jwt.sign({
                   email,
+                  id:user._id,
+                  username:user.username,
                   password: hash,   
                 },
                   process.env.JWT_SECRET,
@@ -76,7 +78,7 @@ async function registerUserController(req,res){
                   message: "user is register successully",
                   user: {
                          email: user.email,
-                         name: user.name
+                         username: user.username
                   }
            })
     
@@ -85,17 +87,17 @@ async function registerUserController(req,res){
 };
 async function loginUserController(req,res){
        // user email or password req.body me  bhejega usko  detructure kr lena hai 
-       const {name , email , password} = req.body;
+       const {username , email , password} = req.body;
 
        // mongoose.findOne krke email ke through user identify kr lena hai 
        const user = await userModel.findOne({
-              $or:[{email},{name}]
+              $or:[{email},{username}]
        });
 
 
        // agr user null aaya to  return krwa dena hai
        if(!user){
-           return    res.status(404).json({
+           return  res.status(404).json({
                      message:"User not exist please register user"
               })
        }
@@ -116,9 +118,10 @@ async function loginUserController(req,res){
 
        const token = jwt.sign({
                email:email,
-               password:hashPassword,
+               username:user.username, 
+               // password:hashPassword,
                id:user._id
-             
+               
        },
        process.env.JWT_SECRET,
        {
@@ -132,7 +135,7 @@ async function loginUserController(req,res){
        return  res.status(200).json({
               message:"User logged in ",
               user:{
-                   name : user.name,
+                   username : user.username,
                    email: user.email,
                    password:user.password
               }

@@ -114,35 +114,74 @@ async function getPostController(req, res) {
 
 
 }
-async function getPostDetailsController(req, res) {
-    //  req.user equal hai decoded ke 
+// async function getPostDetailsController(req, res) {
+//     //  req.user equal hai decoded ke 
 
-    const userId = req.user.id;
+//     const userId = req.user.id;
 
-    // api me jo post ki id aata hai 
-    const postId = req.params.postId;
+//     // api me jo post ki id aata hai 
+//     const postId = req.params.postId;
 
-    const post = await postModel.findById(postId);
+//     const post = await postModel.findById(postId);
 
-    if (!post) {
-        return res.status(404).json({
-            message: "Post not found."
-        })
-    }
+//     if (!post) {
+//         return res.status(404).json({
+//             message: "Post not found."
+//         })
+//     }
 
-    const isValidUser = post.user.toString() === userId;
+//     const isValidUser = post.user.toString() === userId;
 
-    if (!isValidUser) {
-        return res.status(403).json({
-            message: "Forbidden Content."
-        })
-    }
+//     if (!isValidUser) {
+//         return res.status(403).json({
+//             message: "Forbidden Content."
+//         })
+//     }
 
 
-    return res.status(200).json({
-        message: "Posts fetched successfully",
-        post
-    })
+//     return res.status(200).json({
+//         message: "Posts fetched successfully",
+//         post
+//     })
+
+
+// }
+async function getPostDetailsController(req,res){
+       
+        /**
+         * token req se le 
+         * decode kr by verify token 
+         * 
+         * userid  = decoded.userid
+         * post id = req.params.postId
+         * 
+         * verify postid in db by postmodel
+         * 
+         * 
+         * 
+         */
+
+        const token =  req.cookies.token;
+
+        if(!token){
+            return res.status(401).json({
+                message:"Unauthorized Access , invalid token"
+            })
+        }
+        
+        let decoded  ; 
+        try{
+             decoded = jwt.verify(token , process.env.JWT_SECRET)
+        }catch{
+            return res.status(401).json({
+                message:"Unauthorized Access"
+            })
+
+        }
+        const UserId = decoded.id ; 
+        const PostId = req.params.postId ;
+        
+          
 
 
 }
